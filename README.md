@@ -28,7 +28,7 @@ ellipsefit_result = barista_ellipsefit(input_img = img, result = ellipsefit_resu
 ## Attribution
 If you use this software for your research, please cite Lee et al. (2019).
 
-<pre> ``` @ARTICLE{2019ApJ...872...97L,
+<pre> @ARTICLE{2019ApJ...872...97L,
        author = {{Lee}, Yun Hee and {Ann}, Hong Bae and {Park}, Myeong-Gu},
         title = "{Bar Fraction in Early- and Late-type Spirals}",
       journal = {\apj},
@@ -46,6 +46,6 @@ If you use this software for your research, please cite Lee et al. (2019).
  primaryClass = {astro-ph.GA},
        adsurl = {https://ui.adsabs.harvard.edu/abs/2019ApJ...872...97L},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}``` </pre>
+} </pre>
 
 
