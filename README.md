@@ -32,7 +32,8 @@ If you use this software for your research, please cite Lee et al. (2019).
        author = {{Lee}, Yun Hee and {Ann}, Hong Bae and {Park}, Myeong-Gu},
         title = "{Bar Fraction in Early- and Late-type Spirals}",
       journal = {\apj},
-     keywords = {galaxies: evolution, galaxies: formation, galaxies: photometry, galaxies: spiral, galaxies: structure, Astrophysics - Astrophysics of Galaxies},
+     keywords = {galaxies: evolution, galaxies: formation, galaxies: photometry, 
+                 galaxies: spiral, galaxies: structure, Astrophysics - Astrophysics of Galaxies},
          year = 2019,
         month = feb,
        volume = {872},
@@ -40,10 +41,11 @@ If you use this software for your research, please cite Lee et al. (2019).
           eid = {97},
         pages = {97},
           doi = {10.3847/1538-4357/ab0024},
-archivePrefix = {arXiv},
+ archivePrefix = {arXiv},
        eprint = {1901.05183},
  primaryClass = {astro-ph.GA},
        adsurl = {https://ui.adsabs.harvard.edu/abs/2019ApJ...872...97L},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
+
 
