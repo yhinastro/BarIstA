@@ -22,20 +22,8 @@ Text file containing:
 - Radius, intensity, center coordinates, ellipticity, PA, A/B Fourier terms
 
 ## Example
-
-```idl
 ellipsefit_result = barista_ellipsefit(input_img = img, result = ellipsefit_result, $
     cent = [xc, yc], fix_cent = 'fix', step = 1, R25 = R25)
-
-## **Attribution**
-
-**If you use this software for your research, please cite the following paper:**
-
-> Lee, Yun Hee, Ann, Hong Bae, and Park, Myeong-Gu (2019).  
-> *Bar Fraction in Early- and Late-type Spirals*, ApJ, 872, 97.  
-> [DOI: 10.3847/1538-4357/ab0024](https://doi.org/10.3847/1538-4357/ab0024)  
-> [arXiv:1901.05183](https://arxiv.org/abs/1901.05183)
-
 
 ## Attribution
 If you use this software for your research, please cite Lee et al. (2019).
