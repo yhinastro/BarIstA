@@ -10,16 +10,6 @@ Function YH_ellipazi, radius, img, PAc, xc, yc, e, c
 ;ellipse fitting PA -> rotation PA
 PA0 = PAc+90    
 rimg = rot(img, PA0, 1.0, xc, yc, /pivot)
-;print, PA0
-
-;check the rotation
-;PLOTIMAGE, bytscl(rimg), position=[0.65, 0.80, 0.9, 0.97], $
-;title = 'X(pixel)', ytitle='Y(pixel)', xthick=3, ythick=3, /noerase
-
-;timg = rimg[20:79,20:79]
-;;timg = convolimg[70:129,70:129]
-;PLOTIMAGE, bytscl(timg), position=[0.45, 0.5, 0.85, 0.74], $
-;xst = 1, yst = 1, xtickformat='(a1)', ytickformat='(a1)', /noerase
 
 ;---(2) fix the a & b ------------------------
  a = radius 
@@ -65,36 +55,6 @@ azimuthal = fltarr(2,nr*2)
   azimuthal[0,j+nr] = azimuthal[0,j]+3.14
   azimuthal[1,j+nr] = BILINEAR(rimg, px2[j], py2[j])
  Endfor
-;xtest = fltarr(5) & ytest = fltarr(5)
-;xtest = [px1[0], 100, px1[44], px2[0], px2[44]]
-;ytest = [py1[0], 100, py1[44], py2[0], py2[44]]
-
-;check the azimuthal profile
-;If (radius eq 5) then begin
-;Plot, px1, py1, psym = 1, symsize = 0.3, $
-;xran = [20, 80],yran = [20,80], $
-;xst = 1, yst =1, $
-;;xran = [70,130], yran = [70, 130], $
-;position = [0.45, 0.5, 0.85, 0.74], /noerase
-;oplot, px2, py2, psym = 1, symsize = 0.3
-;oplot, xtest, ytest, psym = 1, symsize = 0.8
-;Endif
-;If (radius eq 15) then begin
-;Plot, px1, py1, psym = 1, symsize = 0.3, $
-;xran = [20, 80],yran = [20,80], $
-;;xran = [70, 130],yran = [70,130], $
-;xtickformat = '(a1)', ytickformat = '(a1)', $
-;position = [0.45, 0.5, 0.85, 0.74], /noerase
-;oplot, px2, py2, psym = 1, symsize = 0.3
-;Endif
-;If (radius eq 25) then begin
-;Plot, px1, py1, psym = 1, symsize = 0.3, $
-;xran = [20, 80],yran = [20,80], $
-;;xran = [70, 130],yran = [70,130], $
-;xtickformat = '(a1)', ytickformat = '(a1)', $
-;position = [0.45, 0.5, 0.85, 0.74], /noerase
-;oplot, px2, py2, psym = 1, symsize = 0.3
-;Endif
 return, azimuthal 
 nexto:
 END

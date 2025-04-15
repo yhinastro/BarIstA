@@ -1,6 +1,5 @@
 Function barista_ellipsefit, input_img = img, result = Fname, cent = cent, $
-         fix_cen = fix_cen, step = step, R25 = R25
-; magp = magp, R_fin, I_fin, PA_fin, e_fin 
+         fix_cent = fix_cen, step = step, R25 = R25
           
 ;2025/04/10/Thur/by yhlee =======================
 ;This routine allows you to fit ellipses to a galaxy image in IDL, following the methods of Davis et al. (1985) and Athanassoula et al. (1990).
@@ -17,21 +16,13 @@ Function barista_ellipsefit, input_img = img, result = Fname, cent = cent, $
 ;R25       = Maximum radius (in pixels) up to which ellipses are fitted
 
 ;--- Example Usage ----
-;ellipsefit_result = barista_ellipsefit(input_img = img, result = ellipsefit_result, cent = [xc, yc], fix_cent = 'fix', step = 1, R25 = R25)
+;result_txtfile = barista_ellipsefit(input_img = img, result = result_txtfile, cent = [xc, yc], fix_cent = 'fix', step = 1, R25 = R25)
 
 ;--- Output -----
 ;The routine outputs a text file named 'ellipsefit_result', which contains the following parameters at each radius: 'radius', 'intensity', 'xcent', 'ycent', 'ellipticity', 'PA', 'c', 'A0', 'A1', 'B1', 'A2(e)', 'B2(PA)', 'A4', 'B4'
 ;=================================================
 
 xcent = cent[0] & ycent = cent[1]
-
-If (N_elements(magp) ne 0) then begin
- zero = magp[0]
- exti = magp[1]
- airmass = magp[2]
- resolution = magp[3]
- exptime = magp[4]
-Endif
 
 ;--- open the file for the final result ------
 eresult = Fname
@@ -54,7 +45,7 @@ For i = 0L, R25-1  do begin   ;for radius
 ;IRAF step
 ;ra = ra+ra*0.1
 ra = ra+step
-print, i, ra, rd
+;print, i, ra, rd
  If (ra ge rd) then goto, bye
 
  For t = 0, 15 do begin ;for iteration
@@ -71,23 +62,8 @@ print, i, ra, rd
 ; If (asize[0] eq 0) then goto, bye
 
 ;---(2) Fourier analysis:Buie -----------------
-;coef = YH_fourier(intens, theta, mterms = mterms)
   coef = YH_fourier(azimuthal[1,*], azimuthal[0,*], mterms = 5)
   inten = coef[0]
-;print, i, t, inten
-;a0 = coef[0]
-;a1 = coef[1] & b1 = coef[6]
-;a2 = coef[2] & b2 = coef[7]
-;a3 = coef[3]
-;a4 = coef[4]
-
-;sig = fltarr(num) & sig[*] = 0.00005
-;mterms = 2 
-;t3 = systime(1)
-;fourfit, azimuthal[0,*], azimuthal[1,*], sig, mterms, coef, csig, yfit=yfit, chisq=chisq
-;t4 = systime(1)
-;print, coef, t4-t3
-;result = coef/coef[0]
  
 ;noise level
 ;  If (coef[0] le 0 or Finite(coef[0], /Nan)) then begin 
@@ -98,26 +74,9 @@ print, i, ra, rd
     goto, bye
   Endif
 
-;R25 calculation
-  If (n_elements(magp) ne 0) then begin
-   I25 = coef[0]
-   gtran = 10.^(0.4*(zero[0]+exti[0]*airmass[0]))
-   m_a0 = -2.5*alog10((coef[0]/(exptime*(resolution^2.)))*gtran)
-;print, ra, t, xcent, ycent, I25, m_a0
-
-   If (m_a0 ge 25) then begin 
-    printf, luna, ra, inten, xcent, ycent, e, PAc, c, coef[0], $
-    coef[1]/coef[0], coef[6]/coef[0], coef[2]/coef[0], $
-    coef[7]/coef[0], coef[4]/coef[0], coef[9]/coef[0], $
-    format='(I5,1x,13(F13.7,2x))'
-    goto, bye
-   Endif
-  Endif
-
 ;---(3) Decide the exact center -
  result1 = Fltarr(2) 
  result1 = [abs(coef[1]/coef[0]),abs(coef[6]/coef[0])]
-;rep1 = where(result1 eq max(result1))
 
 ;---(4) Decide the next initial parameter
  result2 = Fltarr(2)
@@ -149,16 +108,9 @@ print, i, ra, rd
    pn = pn + 1
   If (pn gt 1) then Pstep = Pstep/2.
    PAc = PAc + Pstep*coef[7]/abs(coef[7])
-; If (PAc ge 360) then PAc = PAc-360.
-; If (PAc gt 180) then PAc = PAc-180
-; If (PAc lt -180) then PAc = PAc+180
-; print, 'PA', coef[4]/coef[0], Pstep, PAc
   Endif
-;print, ra, t, xcent, ycent, e, PAc
-;print, result1[0], result1[1]
-;print, result2[0], result2[1]
 
-;---(5) rivised the next center
+;---(5) next center
 If (fix_cen eq 'move') then begin 
  scope = coef[0]
  center = YH_centroid(img,scope)

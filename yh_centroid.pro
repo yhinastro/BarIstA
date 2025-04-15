@@ -6,11 +6,6 @@ index = where(img gt scope, num)
 
  If (num eq 0) then index = where(img ge min(img))
 
-; If (index[0] eq -1) then begin
-;  scope = scope/2.
-;  index = where(img gt scope)
-; Endif
-
 imgs = size(img)
 
 xindex = index mod imgs[1] 
