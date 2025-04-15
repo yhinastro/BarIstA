@@ -1,29 +1,21 @@
-# barista_ellipsefit
+# BarIstA 
+Bar Image astro-Arithmometer in IDL
 
+## 1. barista_mask_neighbor.pro
+This routine masks bright objects near the target galaxy and fills the masked region using values from neighboring pixels.
+
+## 2. barista_ellisefit.pro
 IDL routine to perform robust ellipse fitting of galaxy images, based on methods by Davis et al. (1985) and Athanassoula et al. (1990).
 One advantage of this routine is that it provides robust ellipse fitting results without requiring initial guesses for the ellipticity or position angle (PA).
-This routine requires the following subroutines:
-YH_ellipazi.pro, YH_fourier.pro, YH_centroid.pro for this routine.
+This routine requires the following subroutines: YH_ellipazi.pro; YH_fourier.pro; YH_centroid.pro
 
-## Input Parameters
+## 3. barista_overlay_ellipse.pro
+This routine displays ellipses obtained from ellipse fitting on the input image.
 
-| Parameter   | Description                                       |
-|-------------|---------------------------------------------------|
-| `input_img` | 2D galaxy image                                   |
-| `result`    | Output filename                                   |
-| `cent`      | Galaxy center as `[x, y]`                         |
-| `fix_cent`  | `'fix'` or `'move'` for fixing/moving the center |
-| `step`      | Radius increment for fitting (in pixels)          |
-| `R25`       | Maximum fitting radius (in pixels)                |
+## 4. barista_deprojection.pro
+This routine deprojects a galaxy image to faced-on using orientation parameters
+The orientation parameters are typically obtained from ellipse fitting (i.e. barista_ellipsefit.pro)
 
-## Output
-
-Text file containing:
-- Radius, intensity, center coordinates, ellipticity, PA, A/B Fourier terms
-
-## Example
-ellipsefit_result = barista_ellipsefit(input_img = img, result = ellipsefit_result, $
-    cent = [xc, yc], fix_cent = 'fix', step = 1, R25 = R25)
 
 ## Attribution
 If you use this software for your research, please cite Lee et al. (2019).
