@@ -58,7 +58,7 @@ If you use this software for your research, please cite Lee et al. (2019).
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 } </pre>
 
-@ARTICLE{2020ApJ...899...84L,
+<pre> @ARTICLE{2020ApJ...899...84L,
        author = {{Lee}, Yun Hee and {Park}, Myeong-Gu and {Ann}, Hong Bae and {Kim}, Taehyun and {Seo}, Woo-Young},
         title = "{Bar Classification Based on the Potential Map}",
       journal = {\apj},
@@ -75,9 +75,9 @@ archivePrefix = {arXiv},
  primaryClass = {astro-ph.GA},
        adsurl = {https://ui.adsabs.harvard.edu/abs/2020ApJ...899...84L},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}
+}  </pre>
 
-@ARTICLE{2025ApJ...989...55L,
+<pre> @ARTICLE{2025ApJ...989...55L,
        author = {{Lee}, Yun Hee and {Hwang}, Ho Seong and {Cuomo}, Virginia and {Park}, Myeong-Gu and {Kim}, Taehyun and {Hwang}, Narae and {Ann}, Hong Bae and {Kim}, Woong-Tae and {Kim}, Hyun-Jeong and {Seok}, Ji Yeon and {Lee}, Jeong Hwan and {Choi}, Yeon-Ho},
         title = "{Search for Slow Bars in Two Barred Galaxies with Nuclear Structures: NGC 6951 and NGC 7716}",
       journal = {\apj},
@@ -91,5 +91,5 @@ archivePrefix = {arXiv},
           doi = {10.3847/1538-4357/ade8ee},
        adsurl = {https://ui.adsabs.harvard.edu/abs/2025ApJ...989...55L},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}
+}  </pre>
 
