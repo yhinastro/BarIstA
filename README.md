@@ -23,13 +23,13 @@ Deprojection is necessary for accurate measurements of bar length, bar strength,
 This routine performs a Fourier decomposition of the deprojected galaxy image to quantify non-axisymmetric structures such as bars and spiral arms.
 Using the galaxy center (cent), outer radius (R25), it calculates the bar strength (e.g., A2 = abs(a_2^2+b_2^2)/a_0)) and phase angles (Pi2, Pi4) for the m=2 and m=4 modes.
 
-6. barista_bake_qtcake.pro
+##6. barista_bake_qtcake.pro
 This routine computes the force ratio map (Q_T map) from the deprojected galaxy image, representing the ratio of tangential to radial forces in the disk.
 You can determine the disk scale height (hz) from the disk scale length (hr) and morphological type (T).
 The Q_T map—nicknamed “Qtcake” for its marble-cake-like appearance—is essentially baked in this routine and later sliced in radial and azimuthal directions for detailed analysis in the subsequent step.
 Radial profiles of Ft, Fr, and Po are also provided as part of the output.
 
-7. barista_cut_qtcake.pro
+##7. barista_cut_qtcake.pro
 In this routine, you can cut the Qtcake to examine the properties of the bar.
 Following the method of Lee et al. (2020, 2025), it separates the bulge-dominated and disk-dominated regions, measures the bar length (r_Qb) and strength (Qb), and determines the torque profile type (Qtr_class) as well as the bar classification (Bar_class).
 The main outputs are the modified force ratio map (Qtcake_nb), the radial Q_T profile (Qt_r), and the azimuthal profile at the bar radius (Qt_cutcake), which corresponds to Figure 6(e) in Lee et al. (2025).
