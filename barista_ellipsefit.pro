@@ -83,7 +83,11 @@ ra = ra+step
  result2 = [abs(coef[2]/coef[0]),abs(coef[7]/coef[0])]
  rep2 = where(result2 eq max(result2))
 
+<<<<<<< HEAD
 ; If (max(result2) lt 0.001) then goto, nextr 
+=======
+ If (max(result2) lt 0.001) then goto, nextr 
+>>>>>>> 7b629a75a7c7d05c0f382a314e803f28724cf451
 ;for e
  If (rep2[0] eq 0) then begin
    en = en +1

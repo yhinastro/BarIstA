@@ -1,6 +1,10 @@
 Function barista_deprojection, output_Fname = Filename, input_img = img, $
          cent = cent, R25 = SMA, e_disk = ellip, incl = incl, pa_disk = PA, $
+<<<<<<< HEAD
          dep_img, dep_cent, Rimg
+=======
+         dep_img, dep_cent
+>>>>>>> 7b629a75a7c7d05c0f382a314e803f28724cf451
 
 ;2025/04/15/Tue by yhlee ========================
 ;This routine deprojects a galaxy image to faced-on using orientation parameters
