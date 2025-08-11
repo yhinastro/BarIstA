@@ -1,10 +1,27 @@
 Function barista_fourier, input_img = img, cent = centro, R25 = ep, $
-   radi, amp2, A0, Am2, Bm2, a2fft, I0fft, A2_fft, Pi2, Pi4, reA
+   radi, Pi2, Pi4
 
-;For Fourier analysis @2.searchbar.pro 
-;1.Plot azimuthal profile
-;2.Calculate relative fourier amplitude
-;output: radi & Pi2
+;2025/08/11/Mon by yhlee ========================
+;This routine computes Fourier amplitude and phase profiles of a galaxy image
+;using concentric elliptical annuli, typically after deprojection.
+;The analysis is used to characterize bar length and strength.
+
+;--- Required Input Parameters ---
+;input_img  = 2D array containing the galaxy image 
+;             (shoud be masked and deprojected)
+;cent       = Galaxy center as [xcent, ycent]
+;R25        = Outer reference radius (e.g., semi-major axis of outermost fitted ellipse)
+
+;--- Output -----------------------
+;A2         = 1D array of normalized Fourier m=2 amplitudes as a function of radius (A2 = abs(a_2^2+b_2^2)/a_0)
+;radi       = 1D array of semi-major axis lengths at which Fourier components are measured (in pixels, covering the range from center to R25)
+;Pi2        = 1D array of m=2 phase angles 
+;Pi4        = 1D array of m=4 phase angles
+
+;--- Example Usage ----------------
+;A2 = barista_fourier(input_img = img, cent = cent, R25 = R25, radi, Pi2, Pi4)
+;================================================
+
 
 xcenter = centro[0]
 ycenter = centro[1]
@@ -13,35 +30,20 @@ x = indgen(359)
 y = fltarr(260)  
 
 sp = 3
-rn = 0 & ra = sp 
-mterms = 6 
+rn = ep-(sp+1)+1 & ra = sp 
 
-For j = sp, ep-1 do begin
- ra = ra+1
- If (ra ge ep) then goto, out1
- rn = rn+1
-EndFor
-OUT1:
 
 n = 0 & ra = sp 
 
 ;print, rn, mterms
 radi = fltarr(rn)
 Pi2 = fltarr(rn) & Pi4 = fltarr(rn)
-a2fft = fltarr(rn)
-I0fft = fltarr(rn)
-amp2 = fltarr(rn)
 A2_fft = fltarr(rn)
-A0 = fltarr(rn)
-A2 = fltarr(rn)
-Am2 = fltarr(rn)
-Bm2 = fltarr(rn)
-reA = fltarr(mterms,rn)
-Im = fltarr(mterms,rn)
 
 
 For j = sp, ep-1 do begin
-ra = ra+1
+ra = ra + 1
+;print, j, ra, n, rn
 radi[n] = ra
 If (ra ge ep) then goto, out
 
@@ -59,44 +61,16 @@ cirazi = fltarr(3,360)
  Endfor ;For k
 
 ;---(2) Fourier series -------
+;using FFT
 spectrum = FFT(cirazi[1,*])
-
-num = n_elements(cirazi[1,*])
-
-A0fft = float(spectrum[0]) /num 
-A2 = 2 * float(spectrum[2]) /num 
-B2 = -2 * imaginary(spectrum[2]) /num 
-amp2[n] = sqrt(A2^2 + B2^2)/A0fft
-
-a2fft[n] = abs(float(spectrum[2]))
-I0fft[n] = float(spectrum[0])
+a2 = real_part(spectrum[2])
+b2 = imaginary(spectrum[2])
+a4 = real_part(spectrum[4])
+b4 = imaginary(spectrum[4])
 A2_fft[n] = abs(spectrum[2])/float(spectrum[0])
-
-sig = fltarr(k+1) & sig[*] = 0.00005
-fourfit, cirazi[0,*], cirazi[1,*], sig, mterms, coef, csig, $
-yfit=yfit, chisq=chisq
-;print, j, coef[3]/coef[0], coef[4]/coef[0]
- a2 = coef[3] & b2 = coef[4]
- a4 = coef[7] & b4 = coef[8]
-print, float(spectrum[2]), coef[3]
- Am2[n] = abs(coef[3])
-; Am2[n] = sqrt(a2^2.+b2^2.)/coef[0]
-; Am4[n] = abs(coef[7]/coef[0])
- A0[n] = coef[0]
- Bm2[n] = abs(coef[4]/coef[0])
- Pi2[n] = 180/!Pi*atan(coef[4]/coef[3])
- Pi4[n] = 180/!Pi*atan(coef[8]/coef[7])
-
-;---(3) Fourier amplitude ----
-m = 0 & thet = cirazi[0,3]
-
-; For l = 0L, mterms*2-1, 2 do begin
-;  Ams = coef[l+1] & Bms = coef[l+2]
-;  I0 = coef[0] & Im[m,n] = SQRT(Ams^2+Bms^2)
-;  reA[m,n] = Im[m,n]/I0
-;  m = m+1
-; Endfor ;For l
-
+Pi2[n] = 180/!Pi*atan(b2/a2)
+Pi4[n] = 180/!Pi*atan(b4/a4)
+;print, n, Pi2[n], Pi4[n]
 
 n = n+1
  If (n ge rn) then goto, out
@@ -116,5 +90,5 @@ For k = 0L, 4 do begin
 EndFor ; For k
 OKAY:
 
-Return, Am2
+Return, A2_fft
 END

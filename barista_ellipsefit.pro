@@ -1,5 +1,5 @@
-Function barista_ellipsefit, input_img = img, result = Fname, cent = cent, $
-         fix_cent = fix_cen, step = step, R25 = R25
+Function barista_ellipsefit, output_Fname = Fname, input_img = img, $
+         cent = cent, fix_cent = fix_cen, step = step, R25 = R25
           
 ;2025/04/10/Thur/by yhlee =======================
 ;This routine allows you to fit ellipses to a galaxy image in IDL, following the methods of Davis et al. (1985) and Athanassoula et al. (1990).
@@ -8,15 +8,15 @@ Function barista_ellipsefit, input_img = img, result = Fname, cent = cent, $
 ;YH_ellipazi.pro, YH_fourier.pro, YH_centroid.pro for this routine.
 
 ;--- Input Parameters -----
-;input_img = 2D array containing the galaxy image
-;result    = File name for saving the output
-;cent      = X, Y coordinates of the galaxy center, in the form [xcent, ycent] [pixel]
-;fix_cent  = Specify 'fix' to keep the center fixed, or 'move' to allow it to vary with radius during fitting 
-;step      = Step size in pixels for increasing the radius during ellipse fitting
-;R25       = Maximum radius (in pixels) up to which ellipses are fitted
+;output_Fname = File name for saving the output (e.g., 'galaxy_ellip.txt')
+;input_img    = 2D array containing the galaxy image
+;cent         = X, Y coordinates of the galaxy center, in the form [xcent, ycent] [pixel]
+;fix_cent     = Specify 'fix' to keep the center fixed, or 'move' to allow it to vary with radius during fitting 
+;step         = Step size in pixels for increasing the radius during ellipse fitting
+;R25          = Maximum radius (in pixels) up to which ellipses are fitted
 
 ;--- Example Usage ----
-;result_txtfile = barista_ellipsefit(input_img = img, result = result_txtfile, cent = [xc, yc], fix_cent = 'fix', step = 1, R25 = R25)
+;Fname = barista_ellipsefit(output_Fname = Fname, input_img = img, cent = [xc, yc], fix_cent = 'fix', step = 1, R25 = R25)
 
 ;--- Output -----
 ;The routine outputs a text file named 'ellipsefit_result', which contains the following parameters at each radius: 'radius', 'intensity', 'xcent', 'ycent', 'ellipticity', 'PA', 'c', 'A0', 'A1', 'B1', 'A2(e)', 'B2(PA)', 'A4', 'B4'
@@ -83,11 +83,7 @@ ra = ra+step
  result2 = [abs(coef[2]/coef[0]),abs(coef[7]/coef[0])]
  rep2 = where(result2 eq max(result2))
 
-<<<<<<< HEAD
 ; If (max(result2) lt 0.001) then goto, nextr 
-=======
- If (max(result2) lt 0.001) then goto, nextr 
->>>>>>> 7b629a75a7c7d05c0f382a314e803f28724cf451
 ;for e
  If (rep2[0] eq 0) then begin
    en = en +1
