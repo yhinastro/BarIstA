@@ -245,7 +245,7 @@ EndIf
   EndIf
 nd0 = abs(peaks0 - 4)
 nd = abs(n_peaks - 4)
-  If ((pn_eaks ne 4 and peaks0 ne 4) and (nd0 le nd)) then begin 
+  If ((n_peaks ne 4 and peaks0 ne 4) and (nd0 le nd)) then begin 
    peakloca = peakloca0 & n_peaks = peaks0 & Bar_class = Bar_class0
    px = px0 & py = py0 & Qb = Qb0 & Qtcake_nb = Qtcake_nb0
    Qt_cutcake = Qt_cutcake0 & max_r = max_r0[i]
