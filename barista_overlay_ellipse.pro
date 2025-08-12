@@ -108,7 +108,7 @@ ind = where(in_hi eq i, num)
  EndIf 
 EndIf
 
- oplot, fbar[0,*], fbar[1,*], color = 100, linestyle = 0, thick = thick 
+ oplot, fbar[0,*], fbar[1,*], color = 150, linestyle = 0, thick = thick 
 
 NEXTR:
 Endfor ;For i

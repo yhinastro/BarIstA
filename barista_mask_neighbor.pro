@@ -1,7 +1,7 @@
 Function barista_mask_neighbor, output_Fname = Filename, input_img = img, $
          cent = cent, R25 = R25, star_threshold = star_thre, psf = psf, $
          sep_val = sep_val, cut_step = cut_step, cut_lim = cut_lim, $
-         n_neighbor = n_neighbor, model, total_mask 
+         n_neighbor = n_neighbor, mode = mode, model, total_mask 
 
 ;2025/04/15/Tue by yhlee ========================
 ;This routine masks bright objects near the target galaxy and fills the masked region using values from neighboring pixels
@@ -13,7 +13,7 @@ Function barista_mask_neighbor, output_Fname = Filename, input_img = img, $
 ;2. You can fine-tune the masking behavior using the optional parameters
 
 ;--- Required Input Parameters ---
-;output_Fname = Filename for the masked image to be saved 
+;output_Fname = Filename for the masked image to be saved (e.g., 'galaxy_maskimg.fits')
 ;input_img    = 2D array containing the galaxy image
 ;cent         = Galaxy center as [xcent, ycent]
 ;R25          = Galaxy size used to define the region of interest
@@ -25,6 +25,8 @@ Function barista_mask_neighbor, output_Fname = Filename, input_img = img, $
 ;psf            = Smaller values mask minimal areas
 ;               = Larger values mask more broadly
 ;n_neighbor     = Smaller/larger values to estimate replacement values from smaller/more neighbors
+;mode           = 'neighbor' :fill the masking region from values of neighbors
+;mode           = 'sky' :fill the masking region with random value of sky
 
 sky = median(img)
 If (n_elements(star_thre) eq 0) then star_threshold = sqrt(sky)*3
@@ -33,14 +35,15 @@ If (n_elements(cut_step) eq 0) then cut_step = 1.5
 If (n_elements(sep_val) eq 0) then sep_val = 10
 If (n_elements(n_neighbor) eq 0) then n_neighbor = 5 
 If (n_elements(psf) eq 0) then psf = 8
+If (n_elements(mode) eq 0) then mode = 'neighbor'
 
 ;--- Example Usage ---------------
-;result = barista_mask_neighbor(output_Fname = Filename, input_img = img, cent = cent, R25 = R25, model, mask)
+;mask_img = barista_mask_neighbor(output_Fname = Filename, input_img = img, cent = cent, R25 = R25, model, mask)
 
 ;--- Output files ----------------
 ;model         = 2D array containing the filled values
 ;total_mask    = 2D array containing the masked regions
-;result        = Final 2D masked image
+;mask_img      = Final 2D masked image
 ;================================================
 
 
@@ -68,6 +71,7 @@ print, 'cut_val', k, star_thre
  If (star_thre gt cut_lim) then goto, out
  index = (resi_img gt star_thre)
  mindex = where(resi_img gt star_thre, mcount)
+;print, mcount
 
  If (mcount eq 0) then begin
   maskimg = img & goto, next_t 
@@ -77,7 +81,6 @@ print, 'cut_val', k, star_thre
 ;calculate distance to the center
   Dist_circle, odist, [imgs[1],imgs[2]], xcen[0], ycen[0]
   p_radi = index*odist
- 
 ;determine the minimum distance of point/extended sources
   boundary = 0
   r_radi = where(p_radi gt 0, mcount)
@@ -90,6 +93,7 @@ print, 'cut_val', k, star_thre
   diff = so_radi1-so_radi0
   
   bin = where(diff gt sep_val, bnum)
+;print, bnum
   If (bnum eq 0) then boundary = 0 Else boundary = so_radi0[bin[0]]
 ;print, k, cut_val, boundary
 
@@ -119,14 +123,32 @@ print, 'out'
  resi_filt = 1-total_mask
  resi_img = resi_filt*img
 
-;---(4) Find masking value using mean of neighbors 
+
+;---(4) Fill masking region 
 model = Fltarr(imgs[1], imgs[2])
 
+;Fill masking regions with random sky
 ind_mask = where(neigh_filt eq 1, nmask)
     x_mask = ind_mask mod imgs[1]
     y_mask = fix(ind_mask/imgs[1])
     r_mask = sqrt((x_mask-xcen)^2.+(y_mask-ycen)^2.)
 
+If (mode eq 'sky') then begin 
+ For i = 0L, nmask-1 do begin
+   random_val = sky[0]+randomn(seed, 1)*stddev(img)/2.
+   model[x_mask[i], y_mask[i]] = random_val 
+ EndFor
+total_img = (1-total_mask)*cut_img+model*total_mask
+;loadct, 0
+;TK_img_scaling, mask_img, d_img, sky, sky_sig
+;Plotimage, bytscl(model), $
+;    position = [0.07+0.23*2, 0.83-0.15, 0.24+0.23*2, 0.95-0.15] , $
+;    title = 'mask', $
+;    xst = 1, yst = 1, charthick = 2, charsize = 0.6, /noerase
+
+
+EndIf Else begin
+;Find masking value using mean of neighbors 
 ind_neigh = where(neigh_filt eq 2, n_neigh)
     x_neigh = ind_neigh mod imgs[1]
     y_neigh = fix(ind_neigh/imgs[1])
@@ -147,6 +169,7 @@ ind_neigh = where(neigh_filt eq 2, n_neigh)
 ;If some area could not find their masking value, place the sky value instead of 0
  ind = where(total_img eq 0 or Finite(total_img,/NaN), num)
  If (num ne 0) then total_img[ind] = sky
+EndElse
 
 WRITEFITS, Filename+'_maskimg.fits', total_img
 ;=================================
